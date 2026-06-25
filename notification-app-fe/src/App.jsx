@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
-import { fetchNotifications } from "./api/notifications";
-import { sortNotifications } from "./utils/sortNotifications";
-import "./App.css";
+import { Routes, Route, Link } from "react-router-dom";
+import PriorityNotifications from "./pages/PriorityNotifications";
+import AllNotifications from "./pages/AllNotifications";
+
+import { AppBar, Toolbar, Button } from "@mui/material";
 
 export default function App() {
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    async function loadData() {
-      const data = await fetchNotifications();
-      setNotifications(sortNotifications(data));
-    }
-
-    loadData();
-  }, []);
-
   return (
-    <div className="container">
-      <h1>Top 10 Priority Notifications</h1>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            Priority
+          </Button>
 
-      {notifications.map((item) => (
-        <div key={item.ID} className="card">
-          <h3>{item.Type}</h3>
-          <p>{item.Message}</p>
-          <small>{item.Timestamp}</small>
-        </div>
-      ))}
-    </div>
+          <Button color="inherit" component={Link} to="/all">
+            All Notifications
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Routes>
+        <Route path="/" element={<PriorityNotifications />} />
+        <Route path="/all" element={<AllNotifications />} />
+      </Routes>
+    </>
   );
 }
